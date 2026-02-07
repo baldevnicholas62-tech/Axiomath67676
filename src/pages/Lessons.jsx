@@ -2,19 +2,19 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const allLessons = [
-  { title: "Number Theory Basics", program: "MathCounts", status: "completed", slug: "example" },
-  { title: "Counting Principles", program: "MathCounts", status: "in-progress", slug: "example" },
-  { title: "Geometry Fundamentals", program: "MathCounts", status: "locked", slug: "example" },
-  { title: "Ratio & Proportion", program: "MathCounts", status: "locked", slug: "example" },
-  { title: "Divisibility & Primes", program: "AMC 8", status: "completed", slug: "example" },
-  { title: "Combinatorics Intro", program: "AMC 8", status: "in-progress", slug: "example" },
-  { title: "Probability Basics", program: "AMC 8", status: "locked", slug: "example" },
+  { title: "Number Theory Basics", program: "MATHCOUNTS / AMC 8", status: "completed", slug: "example" },
+  { title: "Counting Principles", program: "MATHCOUNTS / AMC 8", status: "in-progress", slug: "example" },
+  { title: "Geometry Fundamentals", program: "MATHCOUNTS / AMC 8", status: "locked", slug: "example" },
+  { title: "Ratio & Proportion", program: "MATHCOUNTS / AMC 8", status: "locked", slug: "example" },
+  { title: "Divisibility & Primes", program: "MATHCOUNTS / AMC 8", status: "completed", slug: "example" },
+  { title: "Combinatorics Intro", program: "MATHCOUNTS / AMC 8", status: "in-progress", slug: "example" },
+  { title: "Probability Basics", program: "MATHCOUNTS / AMC 8", status: "locked", slug: "example" },
   { title: "Algebraic Expressions", program: "AMC 10", status: "locked", slug: "example" },
   { title: "Coordinate Geometry", program: "AMC 10", status: "locked", slug: "example" },
   { title: "Sequences & Series", program: "AMC 10", status: "locked", slug: "example" },
 ];
 
-const filters = ["All", "MathCounts", "AMC 8", "AMC 10"];
+const filters = ["All", "MATHCOUNTS / AMC 8", "AMC 10"];
 
 const statusStyles = {
   completed: "bg-accent/20 text-accent",

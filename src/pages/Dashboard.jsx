@@ -1,20 +1,20 @@
 import { Link } from "react-router-dom";
 
 const progress = [
-  { program: "MathCounts", completed: 3, total: 12, pct: 25 },
-  { program: "AMC 8", completed: 1, total: 10, pct: 10 },
+  { program: "MATHCOUNTS / AMC 8", completed: 3, total: 12, pct: 25 },
+  { program: "MATHCOUNTS / AMC 8", completed: 1, total: 10, pct: 10 },
   { program: "AMC 10", completed: 0, total: 14, pct: 0 },
 ];
 
 const activity = [
   { text: "Completed Lesson: Number Theory Basics", time: "2 hours ago" },
   { text: "Mastered: Divisibility Rules Quiz", time: "3 hours ago" },
-  { text: "Started: AMC 8 - Combinatorics Intro", time: "Yesterday" },
+  { text: "Started: MATHCOUNTS / AMC 8 - Combinatorics Intro", time: "Yesterday" },
 ];
 
 const quickStart = [
-  { title: "Counting Principles", program: "MathCounts", slug: "example" },
-  { title: "Modular Arithmetic", program: "AMC 8", slug: "example" },
+  { title: "Counting Principles", program: "MATHCOUNTS / AMC 8", slug: "example" },
+  { title: "Modular Arithmetic", program: "MATHCOUNTS / AMC 8", slug: "example" },
   { title: "Coordinate Geometry", program: "AMC 10", slug: "example" },
 ];
 

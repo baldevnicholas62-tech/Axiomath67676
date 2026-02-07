@@ -84,7 +84,7 @@ export default function Lesson() {
       {/* Lesson Content */}
       <section>
         <h1 className="text-3xl font-bold mb-1">Counting Principles</h1>
-        <span className="text-xs text-accent font-medium">MathCounts</span>
+        <span className="text-xs text-accent font-medium">MATHCOUNTS / AMC 8</span>
 
         <div className="bg-bg-card border border-border rounded-xl p-6 mt-6 space-y-4">
           <div className="aspect-video bg-bg-surface rounded-lg flex items-center justify-center text-text-muted">

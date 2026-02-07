@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const programs = [
   {
-    name: "MathCounts",
+    name: "MATHCOUNTS / AMC 8",
     grades: "Grades 6-8",
     desc: "Build a strong foundation with competition-style problems designed for middle school students.",
     icon: "\u03C0",
@@ -11,9 +11,9 @@ const programs = [
     lessons: 12,
   },
   {
-    name: "AMC 8",
+    name: "MATHCOUNTS / AMC 8",
     grades: "Grades 6-8",
-    desc: "Master the AMC 8 format with targeted practice on number theory, geometry, and combinatorics.",
+    desc: "Master the MATHCOUNTS / AMC 8 format with targeted practice on number theory, geometry, and combinatorics.",
     icon: "\u0394",
     topics: "Combinatorics, Probability, Logic",
     lessons: 10,
@@ -68,10 +68,9 @@ const features = [
 ];
 
 const stats = [
-  { value: "36+", label: "Lessons" },
-  { value: "200+", label: "Practice Problems" },
-  { value: "3", label: "Competition Programs" },
-  { value: "\u221E", label: "Attempts" },
+  { value: "100+", label: "Lessons" },
+  { value: "500+", label: "Practice Problems" },
+  { value: "98%", label: "Student Success Rate" },
 ];
 
 export default function Home() {
@@ -103,11 +102,14 @@ export default function Home() {
       >
         {/* Grid background */}
         <div
-          className="absolute inset-0 opacity-[0.07] pointer-events-none"
+          className="absolute inset-0 pointer-events-none"
           style={{
+            opacity: 0.045,
             backgroundImage:
-              "linear-gradient(#84cc16 1px, transparent 1px), linear-gradient(90deg, #84cc16 1px, transparent 1px)",
-            backgroundSize: "80px 80px",
+              "linear-gradient(rgba(132, 204, 22, 0.75) 1px, transparent 1px), linear-gradient(90deg, rgba(132, 204, 22, 0.75) 1px, transparent 1px)",
+            backgroundSize: "88px 88px",
+            maskImage: "radial-gradient(circle at 50% 42%, black 35%, transparent 85%)",
+            WebkitMaskImage: "radial-gradient(circle at 50% 42%, black 35%, transparent 85%)",
           }}
         />
 
@@ -125,14 +127,12 @@ export default function Home() {
           }}
         />
 
-        {/* Smaller inner arc */}
+        {/* Bottom fade to background */}
         <div
-          className="absolute left-1/2 -translate-x-1/2 pointer-events-none rounded-full"
+          className="absolute bottom-0 left-0 right-0 pointer-events-none"
           style={{
-            width: "min(850px, 70vw)",
-            height: "min(850px, 70vw)",
-            top: "20%",
-            border: "1px solid rgba(132, 204, 22, 0.10)",
+            height: "40%",
+            background: "linear-gradient(to bottom, transparent 0%, #0a0a0a 100%)",
           }}
         />
 
@@ -165,7 +165,7 @@ export default function Home() {
             style={{ animationDelay: "0.25s" }}
           >
             Structured lessons and practice problems designed
-            specifically for MathCounts, AMC 8, and AMC 10 success
+            specifically for MATHCOUNTS / AMC 8 and AMC 10 success
           </p>
 
           <div
@@ -188,25 +188,27 @@ export default function Home() {
               View Dashboard
             </Link>
           </div>
+
+          {/* Stats Bar */}
+          <div
+            className="animate-fade-in-up grid grid-cols-3 gap-4 mt-12 w-full max-w-2xl mx-auto"
+            style={{ animationDelay: "0.55s" }}
+          >
+            {stats.map((s) => (
+              <div
+                key={s.label}
+                className="bg-bg-card border border-border rounded-xl p-5 text-center hover:border-accent/30 transition-colors"
+              >
+                <div className="text-2xl md:text-3xl font-extrabold text-accent mb-1">{s.value}</div>
+                <div className="text-text-muted text-xs">{s.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Rest of page */}
       <div className="space-y-28 mt-16">
-        {/* Stats Bar */}
-        <section className="reveal">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {stats.map((s) => (
-              <div
-                key={s.label}
-                className="bg-bg-card border border-border rounded-xl p-6 text-center hover:border-accent/30 transition-colors"
-              >
-                <div className="text-3xl md:text-4xl font-extrabold text-accent mb-1">{s.value}</div>
-                <div className="text-text-muted text-sm">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* Programs */}
         <section className="reveal">
