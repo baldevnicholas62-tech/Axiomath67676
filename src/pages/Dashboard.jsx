@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 
 const progress = [
   { program: "MATHCOUNTS / AMC 8", completed: 3, total: 12, pct: 25 },
-  { program: "MATHCOUNTS / AMC 8", completed: 1, total: 10, pct: 10 },
   { program: "AMC 10", completed: 0, total: 14, pct: 0 },
 ];
 

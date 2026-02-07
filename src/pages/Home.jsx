@@ -11,14 +11,6 @@ const programs = [
     lessons: 12,
   },
   {
-    name: "MATHCOUNTS / AMC 8",
-    grades: "Grades 6-8",
-    desc: "Master the MATHCOUNTS / AMC 8 format with targeted practice on number theory, geometry, and combinatorics.",
-    icon: "\u0394",
-    topics: "Combinatorics, Probability, Logic",
-    lessons: 10,
-  },
-  {
     name: "AMC 10",
     grades: "Grades 9-10",
     desc: "Tackle advanced topics including algebra, coordinate geometry, and probability.",
@@ -216,11 +208,11 @@ export default function Home() {
             <span className="text-accent text-sm font-semibold tracking-widest uppercase">Programs</span>
             <h2 className="text-3xl md:text-4xl font-bold mt-2">Choose Your Path</h2>
             <p className="text-text-muted mt-3 max-w-xl mx-auto">
-              Three competition tracks, each with a structured curriculum that takes you from fundamentals to competition-ready.
+              Two competition tracks, each with a structured curriculum that takes you from fundamentals to competition-ready.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 gap-6">
             {programs.map((p) => (
               <Link
                 key={p.name}
