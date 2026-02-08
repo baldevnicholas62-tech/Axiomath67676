@@ -57,7 +57,7 @@ export default function Home() {
   }, []);
 
   const stat1 = useCounter(500, 2000, statsVisible);
-  const stat2 = useCounter(12, 1500, statsVisible);
+  const stat2 = useCounter(100, 1500, statsVisible);
   const stat3 = useCounter(95, 2000, statsVisible);
 
   return (
@@ -231,7 +231,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-6 py-8 grid grid-cols-3 gap-4 text-center">
           {[
             { value: stat1, suffix: "+", label: "Practice problems" },
-            { value: stat2, suffix: "", label: "Topic tracks" },
+            { value: stat2, suffix: "+", label: "Lessons" },
             { value: stat3, suffix: "%", label: "Completion rate" },
           ].map((s, i) => (
             <div key={i}>
@@ -396,22 +396,25 @@ export default function Home() {
           {[
             {
               quote: "The pacing drills made me stop panicking on timed sets. I finally finish with a plan.",
+              name: "Maya Chen",
               by: "AMC 8 student",
               stars: 5,
             },
             {
               quote: "My child stopped guessing and started explaining why each answer works.",
+              name: "David Ramirez",
               by: "Parent",
               stars: 5,
             },
             {
               quote: "The mastery unlocks kept me honest. I couldn\u2019t skip weak topics anymore.",
+              name: "Noah Patel",
               by: "AMC 10 student",
               stars: 5,
             },
           ].map((t, i) => (
             <blockquote
-              key={t.by}
+              key={t.name}
               className={`card-shine animated-border group relative rounded-2xl bg-bg-card/50 backdrop-blur-sm p-7 transition-all duration-300 hover:bg-bg-card/80 hover:-translate-y-1 reveal-delay-${i + 1}`}
             >
               {/* Stars */}
@@ -426,9 +429,12 @@ export default function Home() {
               <p className="text-sm leading-relaxed text-white/85">&ldquo;{t.quote}&rdquo;</p>
               <footer className="mt-5 flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent text-xs font-bold">
-                  {t.by[0]}
+                  {t.name[0]}
                 </div>
-                <span className="text-xs text-text-muted font-medium">{t.by}</span>
+                <div>
+                  <p className="text-xs text-white font-semibold leading-tight">{t.name}</p>
+                  <p className="text-xs text-text-muted font-medium">{t.by}</p>
+                </div>
               </footer>
             </blockquote>
           ))}

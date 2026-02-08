@@ -133,19 +133,19 @@ export default function Dashboard() {
       const s = localStorage.getItem("axiomath_today");
       if (s) { const d = JSON.parse(s); if (d.date === getToday()) return d.value; }
     } catch { /* ignore */ }
-    return 2;
+    return 0;
   });
 
   /* ── streak state ── */
   const [streak, setStreak] = useState(() => {
-    try { const s = localStorage.getItem("axiomath_streak"); return s ? JSON.parse(s) : { count: 7, lastDate: getToday() }; }
-    catch { return { count: 7, lastDate: getToday() }; }
+    try { const s = localStorage.getItem("axiomath_streak"); return s ? JSON.parse(s) : { count: 0, lastDate: null }; }
+    catch { return { count: 0, lastDate: null }; }
   });
 
   /* ── accuracy state ── */
   const [accuracy, setAccuracy] = useState(() => {
-    try { const s = localStorage.getItem("axiomath_accuracy"); return s ? JSON.parse(s) : { correct: 47, total: 56 }; }
-    catch { return { correct: 47, total: 56 }; }
+    try { const s = localStorage.getItem("axiomath_accuracy"); return s ? JSON.parse(s) : { correct: 0, total: 0 }; }
+    catch { return { correct: 0, total: 0 }; }
   });
 
   /* ── ui state ── */
@@ -209,7 +209,11 @@ export default function Dashboard() {
               Day Streak
             </h3>
             <p className="text-xs text-text-muted/60 mt-0.5">
-              {goalPercent >= 100 ? "Goal met today!" : `${goalClamped}% to keep streak`}
+              {goalPercent >= 100
+                ? "Goal met today!"
+                : streak.count > 0
+                  ? `${goalClamped}% to keep streak`
+                  : "Complete your goal to start"}
             </p>
           </div>
 
@@ -229,7 +233,9 @@ export default function Dashboard() {
               Accuracy
             </h3>
             <p className="text-xs text-text-muted/60 mt-0.5">
-              {accuracy.correct} / {accuracy.total} questions
+              {accuracy.total > 0
+                ? `${accuracy.correct} / ${accuracy.total} questions`
+                : "No data yet"}
             </p>
 
             {/* reset overlay */}
