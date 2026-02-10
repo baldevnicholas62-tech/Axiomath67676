@@ -302,8 +302,8 @@ export default function Home() {
       {/* ── Tracks ─────────────────────────────────────── */}
       <section className="reveal max-w-5xl mx-auto mt-32 px-6">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-extrabold">Pick your track</h2>
-          <p className="text-text-muted mt-3">Two paths, both built for competition day.</p>
+          <h2 className="text-3xl sm:text-4xl font-extrabold">Choose your training level</h2>
+          <p className="text-text-muted mt-3">Both paths cover all core competition topics.</p>
         </div>
 
         <div className="grid sm:grid-cols-2 gap-6">
@@ -311,14 +311,14 @@ export default function Home() {
             {
               name: "MATHCOUNTS / AMC 8",
               grades: "Grades 6–8",
-              topics: "Number theory, geometry, counting & probability",
+              topics: "Covers all core topics: number theory, algebra, geometry, and counting & probability.",
               style: "Guided lessons + short timed drills",
               label: "Track A",
             },
             {
               name: "AMC 10",
               grades: "Grades 9–10",
-              topics: "Algebra, combinatorics, advanced problem-solving",
+              topics: "Covers all core topics: number theory, algebra, geometry, and counting & probability.",
               style: "Strategy lessons + challenge problem sets",
               label: "Track B",
             },

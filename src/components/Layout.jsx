@@ -1,12 +1,25 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import db from "../db";
 
 const links = [
   { to: "/", label: "Home" },
   { to: "/dashboard", label: "Dashboard" },
   { to: "/lessons", label: "Lessons" },
+  { to: "/practice", label: "Practice" },
+  { to: "/museum", label: "Museum" },
 ];
 
 export default function Layout() {
+  const { isLoading, user } = db.useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    db.auth.signOut();
+    navigate("/");
+  };
+
+  const userInitial = user?.email?.[0]?.toUpperCase() || "?";
+
   return (
     <div className="min-h-screen bg-bg-primary text-white">
       {/* Sticky glassmorphism header */}
@@ -80,16 +93,35 @@ export default function Layout() {
             ))}
           </div>
 
-          {/* CTA button */}
-          <NavLink
-            to="/lessons"
-            className="hidden sm:inline-flex items-center gap-2 bg-accent/10 hover:bg-accent/20 text-accent text-sm font-semibold px-5 py-2 rounded-full border border-accent/20 hover:border-accent/40 transition-all duration-200 hover:shadow-[0_0_20px_rgba(132,204,22,0.15)]"
-          >
-            Start Training
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </NavLink>
+          {/* Auth controls */}
+          {isLoading ? (
+            <div className="w-20 h-9 rounded-full bg-white/[0.04] animate-pulse" />
+          ) : user ? (
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div
+                className="hidden sm:flex w-8 h-8 rounded-full bg-accent/20 border border-accent/30 items-center justify-center text-accent text-sm font-bold"
+                title={user.email}
+              >
+                {userInitial}
+              </div>
+              <button
+                onClick={handleSignOut}
+                className="inline-flex items-center rounded-full border border-border/50 px-3 py-1.5 text-sm text-text-muted hover:text-white hover:border-border transition-colors"
+              >
+                Log out
+              </button>
+            </div>
+          ) : (
+            <NavLink
+              to="/signin"
+              className="inline-flex items-center gap-2 bg-accent/10 hover:bg-accent/20 text-accent text-sm font-semibold px-5 py-2 rounded-full border border-accent/20 hover:border-accent/40 transition-all duration-200 hover:shadow-[0_0_20px_rgba(132,204,22,0.15)]"
+            >
+              Sign In
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </NavLink>
+          )}
         </div>
       </nav>
 

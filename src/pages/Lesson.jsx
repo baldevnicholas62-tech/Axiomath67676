@@ -1,47 +1,7 @@
 import { useState } from "react";
-
-const questions = [
-  {
-    q: "If f(x) = 3x^2 + 7x - 4, what is f(2)?",
-    choices: ["18", "22", "26", "14"],
-    answer: 1,
-  },
-  {
-    q: "How many prime numbers are less than 30?",
-    choices: ["9", "10", "11", "8"],
-    answer: 1,
-  },
-  {
-    q: "What is the remainder when 2^40 is divided by 7?",
-    choices: ["1", "2", "4", "6"],
-    answer: 2,
-  },
-  {
-    q: "A triangle has sides 5, 12, and 13. What is its area?",
-    choices: ["30", "60", "65", "32.5"],
-    answer: 0,
-  },
-  {
-    q: "In how many ways can 4 books be arranged on a shelf?",
-    choices: ["12", "16", "24", "32"],
-    answer: 2,
-  },
-  {
-    q: "What is the sum of the interior angles of a hexagon?",
-    choices: ["540 degrees", "720 degrees", "900 degrees", "1080 degrees"],
-    answer: 1,
-  },
-  {
-    q: "If log_2(x) = 5, what is x?",
-    choices: ["10", "25", "32", "64"],
-    answer: 2,
-  },
-  {
-    q: "What is the greatest common divisor of 84 and 126?",
-    choices: ["14", "21", "42", "7"],
-    answer: 2,
-  },
-];
+import db from "../db";
+import { questions } from "../data/questions";
+import { recordAnswer } from "../utils/recordAnswer";
 
 const textLessonMessages = [
   {
@@ -71,6 +31,7 @@ const textLessonMessages = [
 ];
 
 export default function Lesson() {
+  const { user } = db.useAuth();
   const [mode, setMode] = useState(null);
   const [textStep, setTextStep] = useState(1);
   const [qIndex, setQIndex] = useState(0);
@@ -104,6 +65,19 @@ export default function Lesson() {
 
     const isCorrect = choiceIdx === current.answer;
     setFeedback(isCorrect ? "correct" : "wrong");
+
+    if (user) {
+      recordAnswer({
+        userId: user.id,
+        questionId: current.id,
+        questionText: current.q,
+        userAnswer: current.choices[choiceIdx],
+        correctAnswer: current.choices[current.answer],
+        correct: isCorrect,
+        topic: current.topic,
+        difficulty: current.difficulty,
+      });
+    }
 
     if (isCorrect) {
       const newStreak = streak + 1;

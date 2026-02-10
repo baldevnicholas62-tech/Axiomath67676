@@ -1,5 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
+import db from "../db";
+import { id, tx } from "@instantdb/react";
+import { topics } from "../data/questions";
+import WeaknessRadar from "../components/WeaknessRadar";
+import DailyCalendar from "../components/DailyCalendar";
 
 /* ── data ─────────────────────────────────────────────────────── */
 
@@ -43,11 +48,10 @@ const recommendations = [
 
 const getToday = () => new Date().toISOString().split("T")[0];
 
-const getGreeting = () => {
+const getGreeting = (name) => {
   const h = new Date().getHours();
-  if (h < 12) return "Good morning";
-  if (h < 18) return "Good afternoon";
-  return "Good evening";
+  const prefix = h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
+  return name ? `${prefix}, ${name}` : prefix;
 };
 
 const difficultyStyle = {
@@ -121,58 +125,183 @@ const ArrowIcon = () => (
 
 /* ════════════════════════════════════════════════════════════════ */
 
+const DEFAULTS = {
+  goalType: "lessons",
+  goalTarget: 3,
+  todayDate: getToday(),
+  todayValue: 0,
+  streakCount: 0,
+  streakLastDate: null,
+  accuracyCorrect: 0,
+  accuracyTotal: 0,
+};
+
 export default function Dashboard() {
-  /* ── daily-goal state ── */
-  const [goal, setGoal] = useState(() => {
-    try { const s = localStorage.getItem("axiomath_goal"); return s ? JSON.parse(s) : { type: "lessons", target: 3 }; }
-    catch { return { type: "lessons", target: 3 }; }
+  const { user } = db.useAuth();
+  const { isLoading, error, data } = db.useQuery({
+    userProgress: { $: { where: { userId: user.id } } },
+    userProfiles: { $: { where: { userId: user.id } } },
+    questionAttempts: { $: { where: { userId: user.id } } },
   });
 
-  const [todayProgress, setTodayProgress] = useState(() => {
-    try {
-      const s = localStorage.getItem("axiomath_today");
-      if (s) { const d = JSON.parse(s); if (d.date === getToday()) return d.value; }
-    } catch { /* ignore */ }
-    return 0;
-  });
+  const migrated = useRef(false);
 
-  /* ── streak state ── */
-  const [streak, setStreak] = useState(() => {
-    try { const s = localStorage.getItem("axiomath_streak"); return s ? JSON.parse(s) : { count: 0, lastDate: null }; }
-    catch { return { count: 0, lastDate: null }; }
-  });
+  /* ── one-time migration from localStorage ── */
+  useEffect(() => {
+    if (isLoading || migrated.current) return;
+    // If no record exists yet, try migrating from localStorage
+    if (!data?.userProgress?.length) {
+      migrated.current = true;
 
-  /* ── accuracy state ── */
-  const [accuracy, setAccuracy] = useState(() => {
-    try { const s = localStorage.getItem("axiomath_accuracy"); return s ? JSON.parse(s) : { correct: 0, total: 0 }; }
-    catch { return { correct: 0, total: 0 }; }
-  });
+      let goalType = DEFAULTS.goalType;
+      let goalTarget = DEFAULTS.goalTarget;
+      let todayDate = DEFAULTS.todayDate;
+      let todayValue = DEFAULTS.todayValue;
+      let streakCount = DEFAULTS.streakCount;
+      let streakLastDate = DEFAULTS.streakLastDate;
+      let accuracyCorrect = DEFAULTS.accuracyCorrect;
+      let accuracyTotal = DEFAULTS.accuracyTotal;
+
+      try {
+        const g = localStorage.getItem("axiomath_goal");
+        if (g) { const p = JSON.parse(g); goalType = p.type || goalType; goalTarget = p.target || goalTarget; }
+      } catch { /* ignore */ }
+      try {
+        const t = localStorage.getItem("axiomath_today");
+        if (t) { const p = JSON.parse(t); if (p.date === getToday()) todayValue = p.value || 0; }
+      } catch { /* ignore */ }
+      try {
+        const s = localStorage.getItem("axiomath_streak");
+        if (s) { const p = JSON.parse(s); streakCount = p.count || 0; streakLastDate = p.lastDate || null; }
+      } catch { /* ignore */ }
+      try {
+        const a = localStorage.getItem("axiomath_accuracy");
+        if (a) { const p = JSON.parse(a); accuracyCorrect = p.correct || 0; accuracyTotal = p.total || 0; }
+      } catch { /* ignore */ }
+
+      const progressId = id();
+      db.transact(
+        tx.userProgress[progressId].update({
+          userId: user.id,
+          goalType, goalTarget, todayDate, todayValue,
+          streakCount, streakLastDate, accuracyCorrect, accuracyTotal,
+        }),
+      );
+
+      // Clear localStorage after migration
+      localStorage.removeItem("axiomath_goal");
+      localStorage.removeItem("axiomath_today");
+      localStorage.removeItem("axiomath_streak");
+      localStorage.removeItem("axiomath_accuracy");
+    }
+  }, [isLoading, data, user.id]);
+
+  /* ── derive state from query ── */
+  const progress = data?.userProgress?.[0];
+  const goal = {
+    type: progress?.goalType ?? DEFAULTS.goalType,
+    target: progress?.goalTarget ?? DEFAULTS.goalTarget,
+  };
+  const todayProgress = (progress?.todayDate === getToday()) ? (progress?.todayValue ?? 0) : 0;
+  const streak = {
+    count: progress?.streakCount ?? DEFAULTS.streakCount,
+    lastDate: progress?.streakLastDate ?? DEFAULTS.streakLastDate,
+  };
+  const accuracy = {
+    correct: progress?.accuracyCorrect ?? DEFAULTS.accuracyCorrect,
+    total: progress?.accuracyTotal ?? DEFAULTS.accuracyTotal,
+  };
+
+  /* ── helper to update progress ── */
+  const updateProgress = (fields) => {
+    if (!progress) return;
+    db.transact(tx.userProgress[progress.id].update(fields));
+  };
 
   /* ── ui state ── */
   const [showSettings, setShowSettings] = useState(false);
   const [tempGoal, setTempGoal] = useState(goal);
   const [confirmReset, setConfirmReset] = useState(false);
 
-  /* ── persist ── */
-  useEffect(() => { localStorage.setItem("axiomath_goal", JSON.stringify(goal)); }, [goal]);
-  useEffect(() => { localStorage.setItem("axiomath_today", JSON.stringify({ date: getToday(), value: todayProgress })); }, [todayProgress]);
-  useEffect(() => { localStorage.setItem("axiomath_streak", JSON.stringify(streak)); }, [streak]);
-  useEffect(() => { localStorage.setItem("axiomath_accuracy", JSON.stringify(accuracy)); }, [accuracy]);
+  // Sync tempGoal when goal changes (e.g. after data loads)
+  useEffect(() => {
+    setTempGoal(goal);
+  }, [goal.type, goal.target]);
 
   /* ── derived ── */
   const goalPercent = goal.target > 0 ? Math.round((todayProgress / goal.target) * 100) : 0;
   const goalClamped = Math.min(100, goalPercent);
   const accPercent = accuracy.total > 0 ? Math.round((accuracy.correct / accuracy.total) * 100) : 0;
 
+  /* ── greeting with user name ── */
+  const profileName = data?.userProfiles?.[0]?.name?.trim();
+  const fallbackName = user?.email?.split("@")[0];
+  const userName = profileName || fallbackName;
+
+  /* ── analytics from questionAttempts ── */
+  const attempts = data?.questionAttempts ?? [];
+
+  const radarData = useMemo(() => {
+    const byTopic = {};
+    topics.forEach((t) => {
+      const topicAttempts = attempts.filter((a) => a.topic === t);
+      const correct = topicAttempts.filter((a) => a.correct).length;
+      byTopic[t] =
+        topicAttempts.length > 0
+          ? Math.round((correct / topicAttempts.length) * 100)
+          : 0;
+    });
+    return byTopic;
+  }, [attempts]);
+
+  const radarMinAttempts = useMemo(() => {
+    const counts = {};
+    topics.forEach((t) => {
+      counts[t] = attempts.filter((a) => a.topic === t).length;
+    });
+    return counts;
+  }, [attempts]);
+
+  const calendarData = useMemo(() => {
+    const byDate = {};
+    const sixMonthsAgo = Date.now() - 180 * 24 * 60 * 60 * 1000;
+    attempts.forEach((a) => {
+      if (a.timestamp && a.timestamp >= sixMonthsAgo) {
+        const date = new Date(a.timestamp).toISOString().split("T")[0];
+        byDate[date] = (byDate[date] || 0) + 1;
+      }
+    });
+    return byDate;
+  }, [attempts]);
+
   /* shared card base */
   const statCard =
     "card-shine animated-border group relative rounded-2xl bg-bg-card/60 backdrop-blur-sm p-6 flex flex-col items-center transition-all duration-300 hover:-translate-y-1";
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="w-8 h-8 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center space-y-3">
+          <p className="text-red-400 text-sm">Something went wrong loading your data.</p>
+          <p className="text-text-muted text-xs">{error.message}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
       {/* ── Greeting ── */}
       <section style={{ animation: "fade-in-up 0.5s ease-out both" }}>
-        <h1 className="text-3xl font-bold tracking-tight">{getGreeting()}</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{getGreeting(userName)}</h1>
       </section>
 
       {/* ══════════ STATS ROW ══════════ */}
@@ -247,7 +376,7 @@ export default function Dashboard() {
                     className="px-4 py-1.5 rounded-lg bg-bg-surface text-sm text-text-muted hover:text-white transition-colors">
                     Cancel
                   </button>
-                  <button onClick={() => { setAccuracy({ correct: 0, total: 0 }); setConfirmReset(false); }}
+                  <button onClick={() => { updateProgress({ accuracyCorrect: 0, accuracyTotal: 0 }); setConfirmReset(false); }}
                     className="px-4 py-1.5 rounded-lg bg-red-500/20 text-sm text-red-400 hover:bg-red-500/30 transition-colors">
                     Reset
                   </button>
@@ -364,6 +493,34 @@ export default function Dashboard() {
         </div>
       </section>
 
+      {/* ══════════ ANALYTICS ROW ══════════ */}
+      <div
+        className="grid lg:grid-cols-2 gap-5"
+        style={{ animation: "fade-in-up 0.6s ease-out both", animationDelay: "0.32s" }}
+      >
+        {/* Weakness Radar */}
+        <section className="space-y-4">
+          <h2 className="text-lg font-semibold flex items-center gap-2.5">
+            <span className="w-1 h-5 rounded-full bg-accent" />
+            Topic Strengths
+          </h2>
+          <div className="card-shine animated-border bg-bg-card/50 border border-border/40 rounded-xl p-6 flex items-center justify-center">
+            <WeaknessRadar data={radarData} minAttempts={radarMinAttempts} />
+          </div>
+        </section>
+
+        {/* Daily Calendar */}
+        <section className="space-y-4">
+          <h2 className="text-lg font-semibold flex items-center gap-2.5">
+            <span className="w-1 h-5 rounded-full bg-accent" />
+            Activity Heatmap
+          </h2>
+          <div className="card-shine animated-border bg-bg-card/50 border border-border/40 rounded-xl p-6 overflow-x-auto">
+            <DailyCalendar data={calendarData} />
+          </div>
+        </section>
+      </div>
+
       {/* ══════════ GOAL SETTINGS MODAL ══════════ */}
       {showSettings && (
         <div
@@ -424,7 +581,10 @@ export default function Dashboard() {
                   Cancel
                 </button>
                 <button
-                  onClick={() => { setGoal({ ...tempGoal }); setShowSettings(false); }}
+                  onClick={() => {
+                    updateProgress({ goalType: tempGoal.type, goalTarget: tempGoal.target });
+                    setShowSettings(false);
+                  }}
                   className="flex-1 py-2.5 rounded-xl bg-accent text-black font-semibold hover:bg-accent-dark transition-colors shadow-[0_0_20px_rgba(132,204,22,0.2)]"
                 >
                   Save
