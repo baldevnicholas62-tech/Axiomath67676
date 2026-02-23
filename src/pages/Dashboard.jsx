@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
 import db from "../db";
 import { id, tx } from "@instantdb/react";
-import { topics } from "../data/questions";
+import { topics, difficultyLabels } from "../data/questions";
 import WeaknessRadar from "../components/WeaknessRadar";
 import DailyCalendar from "../components/DailyCalendar";
 
@@ -274,6 +274,46 @@ export default function Dashboard() {
     return byDate;
   }, [attempts]);
 
+  /* ── wrong answers data ── */
+  const wrongAttempts = useMemo(() => attempts.filter((a) => !a.correct), [attempts]);
+
+  const [wrongExpanded, setWrongExpanded] = useState(false);
+  const [wrongTopicFilter, setWrongTopicFilter] = useState("All");
+  const [wrongSortBy, setWrongSortBy] = useState("newest");
+
+  const wrongTopicCounts = useMemo(() => {
+    const counts = {};
+    wrongAttempts.forEach((a) => { counts[a.topic] = (counts[a.topic] || 0) + 1; });
+    return counts;
+  }, [wrongAttempts]);
+
+  const worstTopic = useMemo(() => {
+    const entries = Object.entries(wrongTopicCounts).sort((a, b) => b[1] - a[1]);
+    return entries[0] ?? null;
+  }, [wrongTopicCounts]);
+
+  const filteredWrong = useMemo(() => {
+    const sorted = [...wrongAttempts].sort((a, b) => {
+      if (wrongSortBy === "newest") return (b.timestamp ?? 0) - (a.timestamp ?? 0);
+      if (wrongSortBy === "oldest") return (a.timestamp ?? 0) - (b.timestamp ?? 0);
+      if (wrongSortBy === "hardest") return (b.difficulty ?? 0) - (a.difficulty ?? 0);
+      return 0;
+    });
+    return wrongTopicFilter === "All" ? sorted : sorted.filter((a) => a.topic === wrongTopicFilter);
+  }, [wrongAttempts, wrongTopicFilter, wrongSortBy]);
+
+  const difficultyColors = { 1: "#84cc16", 2: "#a3e635", 3: "#facc15", 4: "#fb923c", 5: "#f87171" };
+
+  const formatWrongDate = (ts) => {
+    const d = new Date(ts);
+    const diff = Date.now() - d;
+    if (diff < 60_000) return "Just now";
+    if (diff < 3_600_000) return `${Math.floor(diff / 60_000)}m ago`;
+    if (diff < 86_400_000) return `${Math.floor(diff / 3_600_000)}h ago`;
+    if (diff < 172_800_000) return "Yesterday";
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  };
+
   /* shared card base */
   const statCard =
     "card-shine animated-border group relative rounded-2xl bg-bg-card/60 backdrop-blur-sm p-6 flex flex-col items-center transition-all duration-300 hover:-translate-y-1";
@@ -520,6 +560,139 @@ export default function Dashboard() {
           </div>
         </section>
       </div>
+
+      {/* ══════════ WRONG ANSWERS ══════════ */}
+      <section style={{ animation: "fade-in-up 0.6s ease-out both", animationDelay: "0.40s" }}>
+        {/* Toggle header */}
+        <button
+          onClick={() => setWrongExpanded((v) => !v)}
+          className="w-full flex items-center justify-between group/toggle"
+        >
+          <h2 className="text-lg font-semibold flex items-center gap-2.5">
+            <span className="w-1 h-5 rounded-full bg-accent" />
+            Wrong Answers
+            {wrongAttempts.length > 0 && (
+              <span className="ml-1 text-xs font-semibold bg-red-500/15 text-red-400 px-2 py-0.5 rounded-full">
+                {wrongAttempts.length}
+              </span>
+            )}
+          </h2>
+          <div className="flex items-center gap-3">
+            {!wrongExpanded && worstTopic && (
+              <span className="text-xs text-text-muted/50 hidden sm:inline">
+                Most missed: <span className="text-red-400/80">{worstTopic[0]}</span>
+              </span>
+            )}
+            <svg
+              className={`w-5 h-5 text-text-muted transition-transform duration-300 ${wrongExpanded ? "rotate-180" : ""}`}
+              fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </button>
+
+        {/* Expandable content */}
+        <div
+          className={`overflow-hidden transition-all duration-400 ease-out ${
+            wrongExpanded ? "max-h-[2000px] opacity-100 mt-5" : "max-h-0 opacity-0"
+          }`}
+        >
+          {wrongAttempts.length === 0 ? (
+            <div
+              className="bg-bg-card/50 border border-border/40 rounded-2xl p-10 text-center"
+              style={{ animation: "scale-in 0.3s ease-out both" }}
+            >
+              <div className="text-4xl mb-3">&#127942;</div>
+              <h3 className="text-lg font-bold text-accent mb-1">No wrong answers yet!</h3>
+              <p className="text-text-muted text-sm max-w-sm mx-auto">
+                Keep practicing — when you make mistakes, they'll show up here for review.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {/* Filter & sort controls */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex flex-wrap gap-2 flex-1">
+                  {["All", ...topics].map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => setWrongTopicFilter(t)}
+                      className={`shrink-0 px-3 py-1 rounded-lg text-xs font-medium transition-all duration-200 ${
+                        wrongTopicFilter === t
+                          ? "bg-accent text-black shadow-[0_0_16px_rgba(132,204,22,0.2)]"
+                          : "bg-bg-surface text-text-muted hover:text-white border border-border"
+                      }`}
+                    >
+                      {t}
+                      {t !== "All" && wrongTopicCounts[t] ? (
+                        <span className="ml-1 text-[10px] opacity-60">({wrongTopicCounts[t]})</span>
+                      ) : null}
+                    </button>
+                  ))}
+                </div>
+                <select
+                  value={wrongSortBy}
+                  onChange={(e) => setWrongSortBy(e.target.value)}
+                  className="bg-bg-surface border border-border rounded-lg px-3 py-1.5 text-xs text-text-muted outline-none focus:border-accent/40 transition-colors cursor-pointer"
+                >
+                  <option value="newest">Newest first</option>
+                  <option value="oldest">Oldest first</option>
+                  <option value="hardest">Hardest first</option>
+                </select>
+              </div>
+
+              {/* Cards */}
+              {filteredWrong.length === 0 ? (
+                <div className="bg-bg-card/50 border border-border/40 rounded-xl p-8 text-center">
+                  <p className="text-text-muted text-sm">No wrong answers in {wrongTopicFilter}.</p>
+                </div>
+              ) : (
+                <div className="grid md:grid-cols-2 gap-4">
+                  {filteredWrong.map((attempt) => {
+                    const color = difficultyColors[attempt.difficulty] ?? "#84cc16";
+                    return (
+                      <div
+                        key={attempt.id}
+                        className="card-shine group bg-bg-card/60 border border-border/40 rounded-2xl p-5 space-y-3 transition-all duration-300 hover:border-border hover:bg-bg-card/80"
+                        style={{ animation: "fade-in-up 0.4s ease-out both" }}
+                      >
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent/15 text-accent font-semibold">
+                            {attempt.topic}
+                          </span>
+                          <span
+                            className="text-[10px] px-2 py-0.5 rounded-full font-semibold"
+                            style={{ backgroundColor: `${color}20`, color }}
+                          >
+                            {difficultyLabels[attempt.difficulty] ?? `Lvl ${attempt.difficulty}`}
+                          </span>
+                          <span className="ml-auto text-[11px] text-text-muted/40">
+                            {attempt.timestamp ? formatWrongDate(attempt.timestamp) : ""}
+                          </span>
+                        </div>
+                        <p className="text-sm font-medium leading-relaxed">
+                          {attempt.questionText}
+                        </p>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div className="bg-red-500/5 border border-red-500/15 rounded-lg px-3 py-2">
+                            <span className="text-red-400/60 text-[10px] uppercase tracking-wide font-medium">Your answer</span>
+                            <p className="text-red-400 font-semibold mt-0.5">{attempt.userAnswer}</p>
+                          </div>
+                          <div className="bg-accent/5 border border-accent/15 rounded-lg px-3 py-2">
+                            <span className="text-accent/60 text-[10px] uppercase tracking-wide font-medium">Correct</span>
+                            <p className="text-accent font-semibold mt-0.5">{attempt.correctAnswer}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* ══════════ GOAL SETTINGS MODAL ══════════ */}
       {showSettings && (

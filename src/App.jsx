@@ -6,8 +6,6 @@ import Dashboard from "./pages/Dashboard";
 import Lessons from "./pages/Lessons";
 import Lesson from "./pages/Lesson";
 import SignIn from "./pages/SignIn";
-import Practice from "./pages/Practice";
-import Museum from "./pages/Museum";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -26,22 +24,6 @@ export default function App() {
         />
         <Route path="/lessons" element={<Lessons />} />
         <Route path="/lessons/:slug" element={<Lesson />} />
-        <Route
-          path="/practice"
-          element={
-            <ProtectedRoute>
-              <Practice />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/museum"
-          element={
-            <ProtectedRoute>
-              <Museum />
-            </ProtectedRoute>
-          }
-        />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
