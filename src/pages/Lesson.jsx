@@ -143,7 +143,7 @@ export default function Lesson() {
             <h2 className="text-xl font-semibold">Video Lesson</h2>
             <button
               onClick={() => setMode(null)}
-              className="text-xs text-text-muted hover:text-white transition-colors"
+              className="text-xs text-text-muted hover:text-text-primary transition-colors"
             >
               Change option
             </button>
@@ -168,7 +168,7 @@ export default function Lesson() {
             <h2 className="text-xl font-semibold">Text Lesson</h2>
             <button
               onClick={() => setMode(null)}
-              className="text-xs text-text-muted hover:text-white transition-colors"
+              className="text-xs text-text-muted hover:text-text-primary transition-colors"
             >
               Change option
             </button>
@@ -180,7 +180,7 @@ export default function Lesson() {
                 key={index}
                 className={`max-w-xl rounded-lg px-4 py-3 text-sm ${
                   message.role === "example"
-                    ? "bg-accent/10 border border-accent/40 text-white"
+                    ? "bg-accent/10 border border-accent/40 text-accent"
                     : "bg-bg-surface border border-border text-text-muted"
                 }`}
               >
@@ -193,7 +193,7 @@ export default function Lesson() {
             {!isTextLessonComplete ? (
               <button
                 onClick={() => setTextStep((step) => step + 1)}
-                className="bg-accent hover:bg-accent-dark text-black text-sm font-semibold px-5 py-2 rounded-lg transition-colors"
+                className="bg-accent hover:bg-accent-dark text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors"
               >
                 Reveal next message
               </button>
@@ -253,7 +253,7 @@ export default function Lesson() {
                     if (i === current.answer) {
                       style = "bg-accent/20 border border-accent text-accent";
                     } else if (i === selected && feedback === "wrong") {
-                      style = "bg-red-900/30 border border-red-500/50 text-red-400";
+                      style = "bg-red-50 border border-red-300 text-red-500";
                     } else {
                       style = "bg-bg-surface border border-border opacity-50";
                     }
@@ -285,7 +285,7 @@ export default function Lesson() {
                   </span>
                   <button
                     onClick={nextQuestion}
-                    className="bg-accent hover:bg-accent-dark text-black text-sm font-semibold px-5 py-2 rounded-lg transition-colors"
+                    className="bg-accent hover:bg-accent-dark text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors"
                   >
                     Next Question
                   </button>

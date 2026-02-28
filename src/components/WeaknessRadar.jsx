@@ -63,7 +63,7 @@ export default function WeaknessRadar({ data = {}, minAttempts = {} }) {
             key={pct}
             points={polyString(ringPoints(pct))}
             fill="none"
-            stroke="#262626"
+            stroke="#e5e5e5"
             strokeWidth="1"
           />
         ))}
@@ -79,7 +79,7 @@ export default function WeaknessRadar({ data = {}, minAttempts = {} }) {
               y1={CY}
               x2={end.x}
               y2={end.y}
-              stroke="#262626"
+              stroke="#e5e5e5"
               strokeWidth="1"
             />
           );
@@ -91,7 +91,7 @@ export default function WeaknessRadar({ data = {}, minAttempts = {} }) {
             key={pct}
             x={CX + 3}
             y={CY - (pct / 100) * MAX_R + 3}
-            fill="#a3a3a3"
+            fill="#737373"
             fontSize="8"
             opacity="0.4"
           >
@@ -102,8 +102,8 @@ export default function WeaknessRadar({ data = {}, minAttempts = {} }) {
         {/* Data polygon */}
         <polygon
           points={polyString(dataPoints)}
-          fill="rgba(132,204,22,0.15)"
-          stroke="#84cc16"
+          fill="rgba(23,23,23,0.08)"
+          stroke="#171717"
           strokeWidth="2"
           strokeLinejoin="round"
           filter="url(#radar-glow)"
@@ -119,8 +119,8 @@ export default function WeaknessRadar({ data = {}, minAttempts = {} }) {
             cx={pt.x}
             cy={pt.y}
             r="4"
-            fill="#84cc16"
-            stroke="#0a0a0a"
+            fill="#171717"
+            stroke="#ffffff"
             strokeWidth="2"
             style={{ transition: "all 0.8s ease-out" }}
           />
@@ -138,7 +138,7 @@ export default function WeaknessRadar({ data = {}, minAttempts = {} }) {
               y={pt.y}
               textAnchor="middle"
               dominantBaseline="middle"
-              fill="#a3a3a3"
+              fill="#737373"
               fontSize="10"
               fontWeight="500"
             >
@@ -160,7 +160,7 @@ export default function WeaknessRadar({ data = {}, minAttempts = {} }) {
               x={pt.x}
               y={pt.y - 10}
               textAnchor="middle"
-              fill={hasData ? "#ffffff" : "#a3a3a350"}
+              fill={hasData ? "#171717" : "#17171750"}
               fontSize="9"
               fontWeight="600"
             >

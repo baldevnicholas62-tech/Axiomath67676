@@ -4,11 +4,11 @@ const DAY_SIZE = 12;
 const GAP = 3;
 
 const LEVELS = [
-  "#1c1c1c",        // 0 problems
-  "#84cc1630",      // 1-2
-  "#84cc1660",      // 3-5
-  "#84cc16a0",      // 6-9
-  "#84cc16",        // 10+
+  "#e5e5e5",        // 0 problems
+  "#17171725",      // 1-2
+  "#17171755",      // 3-5
+  "#171717aa",      // 6-9
+  "#171717",        // 10+
 ];
 
 function getLevel(count) {
@@ -83,7 +83,7 @@ export default function DailyCalendar({ data = {} }) {
                 key={i}
                 x={0}
                 y={20 + i * (DAY_SIZE + GAP) + DAY_SIZE / 2}
-                fill="#a3a3a3"
+                fill="#737373"
                 fontSize="9"
                 dominantBaseline="middle"
                 opacity="0.5"
@@ -99,7 +99,7 @@ export default function DailyCalendar({ data = {} }) {
               key={i}
               x={30 + m.col * (DAY_SIZE + GAP)}
               y={10}
-              fill="#a3a3a3"
+              fill="#737373"
               fontSize="9"
               opacity="0.5"
             >
@@ -122,7 +122,7 @@ export default function DailyCalendar({ data = {} }) {
                   height={DAY_SIZE}
                   rx={2}
                   fill={LEVELS[level]}
-                  stroke={level > 0 ? "#84cc1620" : "transparent"}
+                  stroke={level > 0 ? "#17171715" : "transparent"}
                   strokeWidth="0.5"
                   className="transition-colors duration-200"
                 >

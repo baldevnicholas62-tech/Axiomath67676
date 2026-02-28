@@ -67,8 +67,8 @@ export default function Home() {
     >
       {/* ── Hero ───────────────────────────────────────── */}
       <section className="relative -mt-10 overflow-hidden">
-        {/* Night-sky gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#040804] via-[#070a07] to-[#0a0a0a]" />
+        {/* Light hero gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#ffffff] via-[#f9f9f9] to-[#f5f5f5]" />
 
         {/* Subtle grid */}
         <div className="absolute inset-0 grid-bg" />
@@ -78,13 +78,13 @@ export default function Home() {
         {/* Twinkling star layer */}
         <div className="absolute inset-0 starfield-twinkle" />
 
-        {/* Large orbiting aurora blobs */}
+        {/* Subtle dark orbs on light bg */}
         <div
           className="absolute w-[700px] h-[700px] rounded-full pointer-events-none"
           style={{
             top: "10%",
             left: "50%",
-            background: "radial-gradient(circle, rgba(132,204,22,0.07) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(0,0,0,0.03) 0%, transparent 70%)",
             animation: "orb-drift-1 20s ease-in-out infinite, morph 15s ease-in-out infinite",
           }}
         />
@@ -93,7 +93,7 @@ export default function Home() {
           style={{
             top: "30%",
             left: "20%",
-            background: "radial-gradient(circle, rgba(101,163,13,0.05) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(0,0,0,0.02) 0%, transparent 70%)",
             animation: "orb-drift-2 18s ease-in-out infinite, morph 12s ease-in-out infinite reverse",
           }}
         />
@@ -102,7 +102,7 @@ export default function Home() {
           style={{
             top: "5%",
             right: "10%",
-            background: "radial-gradient(circle, rgba(132,204,22,0.04) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(0,0,0,0.02) 0%, transparent 70%)",
             animation: "orb-drift-1 22s ease-in-out infinite reverse",
           }}
         />
@@ -111,7 +111,7 @@ export default function Home() {
         {SYMBOLS.map((s, i) => (
           <div
             key={i}
-            className="absolute hidden md:block pointer-events-none select-none font-serif text-accent/[0.07]"
+            className="absolute hidden md:block pointer-events-none select-none font-serif text-text-primary/[0.06]"
             style={{
               left: s.x,
               top: s.y,
@@ -142,8 +142,8 @@ export default function Home() {
               left: f.left,
               width: f.size,
               height: f.size,
-              backgroundColor: "rgba(132,204,22,0.7)",
-              boxShadow: `0 0 ${f.size * 4}px rgba(132,204,22,0.5), 0 0 ${f.size * 10}px rgba(132,204,22,0.2)`,
+              backgroundColor: "rgba(23,23,23,0.15)",
+              boxShadow: `0 0 ${f.size * 4}px rgba(23,23,23,0.1), 0 0 ${f.size * 10}px rgba(23,23,23,0.05)`,
               animation: `twinkle ${f.dur}s ease-in-out ${f.delay}s infinite, drift ${f.dur * 3}s ease-in-out ${f.delay}s infinite`,
             }}
           />
@@ -155,9 +155,9 @@ export default function Home() {
           viewBox="0 0 1440 200"
           preserveAspectRatio="none"
         >
-          <path d="M0 200 V140 Q360 95 720 125 Q1080 85 1440 110 V200Z" fill="#0d110d" />
-          <path d="M0 200 V165 Q400 140 800 155 Q1200 135 1440 152 V200Z" fill="#0b0d0b" />
-          <path d="M0 200 V182 Q500 170 1000 177 Q1300 170 1440 175 V200Z" fill="#0a0a0a" />
+          <path d="M0 200 V140 Q360 95 720 125 Q1080 85 1440 110 V200Z" fill="#e5e5e5" />
+          <path d="M0 200 V165 Q400 140 800 155 Q1200 135 1440 152 V200Z" fill="#ebebeb" />
+          <path d="M0 200 V182 Q500 170 1000 177 Q1300 170 1440 175 V200Z" fill="#f0f0f0" />
         </svg>
 
         {/* Hero content */}
@@ -196,7 +196,7 @@ export default function Home() {
           >
             <Link
               to="/lessons"
-              className="group relative inline-flex items-center gap-2.5 bg-accent hover:bg-accent-dark text-black font-bold px-9 py-4 rounded-2xl transition-all duration-300 hover:shadow-[0_0_60px_rgba(132,204,22,0.35)] hover:scale-[1.02] active:scale-[0.98]"
+              className="group relative inline-flex items-center gap-2.5 bg-accent hover:bg-accent-dark text-white font-bold px-9 py-4 rounded-2xl transition-all duration-300 hover:shadow-[0_0_60px_rgba(23,23,23,0.15)] hover:scale-[1.02] active:scale-[0.98]"
             >
               {/* Pulse rings */}
               <span className="absolute inset-0 rounded-2xl border border-accent/40" style={{ animation: "pulse-ring 2s ease-out infinite" }} />
@@ -215,7 +215,7 @@ export default function Home() {
             </Link>
             <Link
               to="/dashboard"
-              className="text-sm text-text-muted hover:text-white transition-colors py-2 px-4 border border-transparent hover:border-border rounded-xl"
+              className="text-sm text-text-muted hover:text-text-primary transition-colors py-2 px-4 border border-transparent hover:border-border rounded-xl"
             >
               or view dashboard →
             </Link>
@@ -287,7 +287,7 @@ export default function Home() {
           ].map((item, i) => (
             <div
               key={item.title}
-              className={`card-shine animated-border group relative rounded-2xl bg-bg-card/50 backdrop-blur-sm p-7 transition-all duration-300 hover:bg-bg-card/80 hover:-translate-y-1 hover:shadow-[0_20px_60px_-12px_rgba(132,204,22,0.1)] reveal-delay-${i + 1}`}
+              className={`card-shine animated-border group relative rounded-2xl bg-bg-card/50 backdrop-blur-sm p-7 transition-all duration-300 hover:bg-bg-card/80 hover:-translate-y-1 hover:shadow-[0_20px_60px_-12px_rgba(23,23,23,0.06)] reveal-delay-${i + 1}`}
             >
               <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 text-accent flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
                 {item.icon}
@@ -326,7 +326,7 @@ export default function Home() {
             <Link
               key={track.name}
               to="/lessons"
-              className={`card-shine animated-border group relative rounded-2xl bg-bg-card/50 backdrop-blur-sm p-7 transition-all duration-300 hover:bg-bg-card/80 hover:-translate-y-1 hover:shadow-[0_20px_60px_-12px_rgba(132,204,22,0.1)] reveal-delay-${i + 1}`}
+              className={`card-shine animated-border group relative rounded-2xl bg-bg-card/50 backdrop-blur-sm p-7 transition-all duration-300 hover:bg-bg-card/80 hover:-translate-y-1 hover:shadow-[0_20px_60px_-12px_rgba(23,23,23,0.06)] reveal-delay-${i + 1}`}
             >
               <div className="flex items-start justify-between">
                 <div>
@@ -426,13 +426,13 @@ export default function Home() {
                 ))}
               </div>
 
-              <p className="text-sm leading-relaxed text-white/85">&ldquo;{t.quote}&rdquo;</p>
+              <p className="text-sm leading-relaxed text-text-primary/85">&ldquo;{t.quote}&rdquo;</p>
               <footer className="mt-5 flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent text-xs font-bold">
                   {t.name[0]}
                 </div>
                 <div>
-                  <p className="text-xs text-white font-semibold leading-tight">{t.name}</p>
+                  <p className="text-xs text-text-primary font-semibold leading-tight">{t.name}</p>
                   <p className="text-xs text-text-muted font-medium">{t.by}</p>
                 </div>
               </footer>
@@ -450,7 +450,7 @@ export default function Home() {
             style={{
               top: "-50px",
               right: "-80px",
-              background: "radial-gradient(circle, rgba(132,204,22,0.06) 0%, transparent 70%)",
+              background: "radial-gradient(circle, rgba(0,0,0,0.03) 0%, transparent 70%)",
               animation: "orb-drift-1 15s ease-in-out infinite",
             }}
           />
@@ -459,7 +459,7 @@ export default function Home() {
             style={{
               bottom: "-60px",
               left: "-60px",
-              background: "radial-gradient(circle, rgba(101,163,13,0.04) 0%, transparent 70%)",
+              background: "radial-gradient(circle, rgba(0,0,0,0.02) 0%, transparent 70%)",
               animation: "orb-drift-2 18s ease-in-out infinite",
             }}
           />
@@ -471,7 +471,7 @@ export default function Home() {
 
           <Link
             to="/lessons"
-            className="group relative inline-flex items-center gap-2.5 mt-10 bg-accent hover:bg-accent-dark text-black font-bold px-9 py-4 rounded-2xl transition-all duration-300 hover:shadow-[0_0_60px_rgba(132,204,22,0.35)] hover:scale-[1.02] active:scale-[0.98]"
+            className="group relative inline-flex items-center gap-2.5 mt-10 bg-accent hover:bg-accent-dark text-white font-bold px-9 py-4 rounded-2xl transition-all duration-300 hover:shadow-[0_0_60px_rgba(23,23,23,0.15)] hover:scale-[1.02] active:scale-[0.98]"
           >
             <span className="absolute inset-0 rounded-2xl border border-accent/30" style={{ animation: "pulse-ring 2.5s ease-out infinite" }} />
             <span className="relative">Start training — it's free</span>

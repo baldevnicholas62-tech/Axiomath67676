@@ -111,7 +111,7 @@ export default function SignIn() {
               placeholder="Your name"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full bg-bg-surface border border-border/60 rounded-xl px-4 py-3 text-white placeholder:text-text-muted/40 outline-none focus:border-accent/60 focus:shadow-[0_0_0_3px_rgba(132,204,22,0.1)] transition-all"
+              className="w-full bg-bg-surface border border-border/60 rounded-xl px-4 py-3 text-text-primary placeholder:text-text-muted/40 outline-none focus:border-accent/60 focus:shadow-[0_0_0_3px_rgba(23,23,23,0.08)] transition-all"
               autoComplete="name"
               autoFocus
             />
@@ -121,13 +121,13 @@ export default function SignIn() {
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-bg-surface border border-border/60 rounded-xl px-4 py-3 text-white placeholder:text-text-muted/40 outline-none focus:border-accent/60 focus:shadow-[0_0_0_3px_rgba(132,204,22,0.1)] transition-all"
+              className="w-full bg-bg-surface border border-border/60 rounded-xl px-4 py-3 text-text-primary placeholder:text-text-muted/40 outline-none focus:border-accent/60 focus:shadow-[0_0_0_3px_rgba(23,23,23,0.08)] transition-all"
               autoComplete="email"
             />
             <button
               type="submit"
               disabled={sending || !email || !fullName.trim()}
-              className="w-full py-3 rounded-xl bg-accent text-black font-semibold hover:bg-accent-dark transition-colors shadow-[0_0_20px_rgba(132,204,22,0.2)] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 rounded-xl bg-accent text-white font-semibold hover:bg-accent-dark transition-colors shadow-[0_0_20px_rgba(23,23,23,0.1)] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {sending ? "Sending..." : "Send sign-in code"}
             </button>
@@ -141,20 +141,20 @@ export default function SignIn() {
               placeholder="Enter code"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="w-full bg-bg-surface border border-border/60 rounded-xl px-4 py-3 text-white text-center text-lg tracking-widest placeholder:text-text-muted/40 placeholder:tracking-normal placeholder:text-base outline-none focus:border-accent/60 focus:shadow-[0_0_0_3px_rgba(132,204,22,0.1)] transition-all"
+              className="w-full bg-bg-surface border border-border/60 rounded-xl px-4 py-3 text-text-primary text-center text-lg tracking-widest placeholder:text-text-muted/40 placeholder:tracking-normal placeholder:text-base outline-none focus:border-accent/60 focus:shadow-[0_0_0_3px_rgba(23,23,23,0.08)] transition-all"
               autoFocus
             />
             <button
               type="submit"
               disabled={sending || !code}
-              className="w-full py-3 rounded-xl bg-accent text-black font-semibold hover:bg-accent-dark transition-colors shadow-[0_0_20px_rgba(132,204,22,0.2)] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 rounded-xl bg-accent text-white font-semibold hover:bg-accent-dark transition-colors shadow-[0_0_20px_rgba(23,23,23,0.1)] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {sending ? "Verifying..." : "Verify code"}
             </button>
             <button
               type="button"
               onClick={() => { setSentTo(null); setCode(""); setError(null); }}
-              className="w-full text-sm text-text-muted hover:text-white transition-colors"
+              className="w-full text-sm text-text-muted hover:text-text-primary transition-colors"
             >
               Use a different email
             </button>

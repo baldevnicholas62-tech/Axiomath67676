@@ -101,8 +101,8 @@ export default function Museum() {
               onClick={() => setTopicFilter(t)}
               className={`shrink-0 px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                 topicFilter === t
-                  ? "bg-accent text-black shadow-[0_0_16px_rgba(132,204,22,0.2)]"
-                  : "bg-bg-surface text-text-muted hover:text-white border border-border"
+                  ? "bg-accent text-black shadow-[0_0_16px_rgba(23,23,23,0.1)]"
+                  : "bg-bg-surface text-text-muted hover:text-text-primary border border-border"
               }`}
             >
               {t}

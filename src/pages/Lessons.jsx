@@ -160,7 +160,7 @@ const statusConfig = {
     icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
   },
   locked: {
-    bg: "bg-white/5",
+    bg: "bg-black/5",
     text: "text-text-muted/60",
     label: "Locked",
     icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z",
@@ -211,8 +211,8 @@ export default function Lessons() {
               className="h-full rounded-full transition-all duration-700"
               style={{
                 width: `${Math.round((completedCount / totalCount) * 100)}%`,
-                background: "linear-gradient(90deg, #65a30d, #84cc16)",
-                boxShadow: "0 0 12px rgba(132,204,22,0.35)",
+                background: "linear-gradient(90deg, #404040, #171717)",
+                boxShadow: "0 0 12px rgba(23,23,23,0.15)",
               }}
             />
           </div>
@@ -234,7 +234,7 @@ export default function Lessons() {
             placeholder="Search lessons..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-bg-card/60 border border-border/40 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder:text-text-muted/40 outline-none focus:border-accent/40 focus:shadow-[0_0_0_3px_rgba(132,204,22,0.08)] transition-all"
+            className="w-full bg-bg-card/60 border border-border/40 rounded-xl pl-10 pr-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted/40 outline-none focus:border-accent/40 focus:shadow-[0_0_0_3px_rgba(23,23,23,0.06)] transition-all"
           />
         </div>
 
@@ -246,8 +246,8 @@ export default function Lessons() {
               onClick={() => setFilter(f)}
               className={`shrink-0 px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                 filter === f
-                  ? "bg-accent text-black shadow-[0_0_16px_rgba(132,204,22,0.2)]"
-                  : "bg-bg-surface text-text-muted hover:text-white border border-border hover:border-border/80"
+                  ? "bg-accent text-white shadow-[0_0_16px_rgba(23,23,23,0.1)]"
+                  : "bg-bg-surface text-text-muted hover:text-text-primary border border-border hover:border-border/80"
               }`}
             >
               {f}
@@ -280,7 +280,7 @@ export default function Lessons() {
               className={`card-shine group relative bg-bg-card/60 border border-border/40 rounded-2xl p-5 transition-all duration-300 block ${
                 isLocked
                   ? "opacity-60 cursor-not-allowed"
-                  : "hover:border-accent/30 hover:bg-bg-card/80 hover:-translate-y-0.5 hover:shadow-[0_20px_60px_-12px_rgba(132,204,22,0.06)]"
+                  : "hover:border-accent/30 hover:bg-bg-card/80 hover:-translate-y-0.5 hover:shadow-[0_20px_60px_-12px_rgba(23,23,23,0.06)]"
               }`}
             >
               {/* Top row: subject + status */}

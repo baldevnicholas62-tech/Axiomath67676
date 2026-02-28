@@ -10,19 +10,20 @@ export function recordAnswer({
   correct,
   topic,
   difficulty,
+  source,
 }) {
   const attemptId = id();
-  db.transact(
-    tx.questionAttempts[attemptId].update({
-      userId,
-      questionId,
-      questionText,
-      userAnswer,
-      correctAnswer,
-      correct,
-      topic,
-      difficulty,
-      timestamp: Date.now(),
-    }),
-  );
+  const payload = {
+    userId,
+    questionId,
+    questionText,
+    userAnswer,
+    correctAnswer,
+    correct,
+    topic,
+    difficulty,
+    timestamp: Date.now(),
+  };
+  if (source) payload.source = source;
+  db.transact(tx.questionAttempts[attemptId].update(payload));
 }

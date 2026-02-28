@@ -183,12 +183,12 @@ export default function Practice() {
             <span className="text-text-muted/30">/</span>
             <span className="text-red-400 font-medium">{session.wrong}</span>
             <span className="w-px h-4 bg-border" />
-            <span className="font-medium" style={{ color: accuracy >= 70 ? "#84cc16" : accuracy >= 40 ? "#facc15" : "#f87171" }}>
+            <span className="font-medium" style={{ color: accuracy >= 70 ? "#171717" : accuracy >= 40 ? "#d97706" : "#f87171" }}>
               {accuracy}%
             </span>
             <button
               onClick={resetSession}
-              className="text-text-muted/40 hover:text-white transition-colors ml-1"
+              className="text-text-muted/40 hover:text-text-primary transition-colors ml-1"
               title="Reset session"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -206,7 +206,7 @@ export default function Practice() {
         <div>
           <label className="text-sm text-text-muted mb-3 block">
             Difficulty —{" "}
-            <span className="font-semibold text-white">
+            <span className="font-semibold text-text-primary">
               {difficultyLabels[difficulty]}
             </span>
           </label>
@@ -224,7 +224,7 @@ export default function Practice() {
               }}
               className="w-full h-2 rounded-full appearance-none cursor-pointer"
               style={{
-                background: `linear-gradient(to right, ${color} ${((difficulty - 1) / 4) * 100}%, #1c1c1c ${((difficulty - 1) / 4) * 100}%)`,
+                background: `linear-gradient(to right, ${color} ${((difficulty - 1) / 4) * 100}%, #e5e5e5 ${((difficulty - 1) / 4) * 100}%)`,
                 accentColor: color,
               }}
             />
@@ -256,8 +256,8 @@ export default function Practice() {
                 }}
                 className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                   topicFilter === t
-                    ? "bg-accent text-black shadow-[0_0_16px_rgba(132,204,22,0.2)]"
-                    : "bg-bg-surface text-text-muted hover:text-white border border-border"
+                    ? "bg-accent text-white shadow-[0_0_16px_rgba(23,23,23,0.1)]"
+                    : "bg-bg-surface text-text-muted hover:text-text-primary border border-border"
                 }`}
               >
                 {t}
@@ -278,8 +278,8 @@ export default function Practice() {
                 onClick={() => setTimerLimit(opt.value)}
                 className={`px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                   timerLimit === opt.value
-                    ? "bg-accent text-black shadow-[0_0_16px_rgba(132,204,22,0.2)]"
-                    : "bg-bg-surface text-text-muted hover:text-white border border-border"
+                    ? "bg-accent text-white shadow-[0_0_16px_rgba(23,23,23,0.1)]"
+                    : "bg-bg-surface text-text-muted hover:text-text-primary border border-border"
                 }`}
               >
                 {opt.label}
@@ -292,7 +292,7 @@ export default function Practice() {
         <button
           onClick={generate}
           disabled={pool.length === 0}
-          className="w-full py-3 rounded-xl bg-accent text-black font-semibold hover:bg-accent-dark transition-all duration-200 shadow-[0_0_20px_rgba(132,204,22,0.2)] hover:shadow-[0_0_30px_rgba(132,204,22,0.3)] disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.99]"
+          className="w-full py-3 rounded-xl bg-accent text-white font-semibold hover:bg-accent-dark transition-all duration-200 shadow-[0_0_20px_rgba(23,23,23,0.1)] hover:shadow-[0_0_30px_rgba(23,23,23,0.15)] disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.99]"
         >
           {current ? "Next Question" : "Generate Question"}
           <span className="text-black/50 ml-2 text-sm font-normal">
@@ -350,8 +350,8 @@ export default function Practice() {
                 className="h-full rounded-full transition-all duration-1000 ease-linear"
                 style={{
                   width: `${(timeLeft / timerLimit) * 100}%`,
-                  background: timeLeft <= 10 ? "#f87171" : timeLeft <= 20 ? "#facc15" : "#84cc16",
-                  boxShadow: `0 0 8px ${timeLeft <= 10 ? "rgba(248,113,113,0.4)" : "rgba(132,204,22,0.3)"}`,
+                  background: timeLeft <= 10 ? "#f87171" : timeLeft <= 20 ? "#facc15" : "#171717",
+                  boxShadow: `0 0 8px ${timeLeft <= 10 ? "rgba(248,113,113,0.4)" : "rgba(23,23,23,0.2)"}`,
                 }}
               />
             </div>
@@ -367,7 +367,7 @@ export default function Practice() {
                 if (i === current.answer) {
                   style = "bg-accent/20 border border-accent text-accent";
                 } else if (i === selected && (feedback === "wrong" || isTimedOut)) {
-                  style = "bg-red-900/30 border border-red-500/50 text-red-400";
+                  style = "bg-red-50 border border-red-300 text-red-500";
                 } else {
                   style = "bg-bg-surface border border-border opacity-50";
                 }
@@ -384,7 +384,7 @@ export default function Practice() {
                       ? "bg-accent/30 text-accent"
                       : feedback !== null && i === selected && feedback !== "correct"
                         ? "bg-red-500/20 text-red-400"
-                        : "bg-white/[0.04] text-text-muted group-hover/choice:bg-accent/10 group-hover/choice:text-accent"
+                        : "bg-black/[0.04] text-text-muted group-hover/choice:bg-accent/10 group-hover/choice:text-accent"
                   }`}>
                     {i + 1}
                   </span>
@@ -427,7 +427,7 @@ export default function Practice() {
               </span>
               <button
                 onClick={generate}
-                className="bg-accent hover:bg-accent-dark text-black text-sm font-semibold px-5 py-2 rounded-xl transition-all duration-200 hover:shadow-[0_0_20px_rgba(132,204,22,0.2)]"
+                className="bg-accent hover:bg-accent-dark text-black text-sm font-semibold px-5 py-2 rounded-xl transition-all duration-200 hover:shadow-[0_0_20px_rgba(23,23,23,0.1)]"
               >
                 Next
                 <span className="hidden sm:inline"> Question</span>
@@ -442,14 +442,14 @@ export default function Practice() {
       {!current && (
         <div className="hidden sm:flex items-center justify-center gap-6 text-xs text-text-muted/30 py-4">
           <span className="flex items-center gap-1.5">
-            <kbd className="px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.06] text-text-muted/50 font-mono">1</kbd>
-            <kbd className="px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.06] text-text-muted/50 font-mono">2</kbd>
-            <kbd className="px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.06] text-text-muted/50 font-mono">3</kbd>
-            <kbd className="px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.06] text-text-muted/50 font-mono">4</kbd>
+            <kbd className="px-1.5 py-0.5 rounded bg-black/[0.04] border border-black/[0.06] text-text-muted/50 font-mono">1</kbd>
+            <kbd className="px-1.5 py-0.5 rounded bg-black/[0.04] border border-black/[0.06] text-text-muted/50 font-mono">2</kbd>
+            <kbd className="px-1.5 py-0.5 rounded bg-black/[0.04] border border-black/[0.06] text-text-muted/50 font-mono">3</kbd>
+            <kbd className="px-1.5 py-0.5 rounded bg-black/[0.04] border border-black/[0.06] text-text-muted/50 font-mono">4</kbd>
             to answer
           </span>
           <span className="flex items-center gap-1.5">
-            <kbd className="px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.06] text-text-muted/50 font-mono">Enter</kbd>
+            <kbd className="px-1.5 py-0.5 rounded bg-black/[0.04] border border-black/[0.06] text-text-muted/50 font-mono">Enter</kbd>
             next question
           </span>
         </div>

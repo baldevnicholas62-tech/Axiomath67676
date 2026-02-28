@@ -61,13 +61,13 @@ const difficultyStyle = {
 };
 
 const activityDot = {
-  completed: "bg-accent shadow-[0_0_6px_rgba(132,204,22,0.5)]",
+  completed: "bg-accent shadow-[0_0_6px_rgba(23,23,23,0.3)]",
   mastered: "bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.5)]",
-  started: "bg-white/40",
+  started: "bg-black/30",
 };
 
 /* ── Rounded-rect progress ring ── */
-function ProgressRing({ percent, size = 140, rx = 28, strokeWidth = 7, color = "#84cc16", children }) {
+function ProgressRing({ percent, size = 140, rx = 28, strokeWidth = 7, color = "#171717", children }) {
   const p = Math.min(100, Math.max(0, percent));
   const half = strokeWidth / 2;
   const inner = size - strokeWidth;
@@ -76,7 +76,7 @@ function ProgressRing({ percent, size = 140, rx = 28, strokeWidth = 7, color = "
     <div className="relative" style={{ width: size, height: size }}>
       <svg width={size} height={size}>
         <rect x={half} y={half} width={inner} height={inner} rx={rx}
-          fill="none" stroke="#1c1c1c" strokeWidth={strokeWidth} />
+          fill="none" stroke="#e5e5e5" strokeWidth={strokeWidth} />
         <rect x={half} y={half} width={inner} height={inner} rx={rx}
           fill="none" stroke={color} strokeWidth={strokeWidth}
           strokeLinecap="round" pathLength="100"
@@ -349,10 +349,10 @@ export default function Dashboard() {
         <div className="grid md:grid-cols-3 gap-5">
 
           {/* ── Daily Goal ── */}
-          <div className={`${statCard} hover:shadow-[0_20px_60px_-12px_rgba(132,204,22,0.12)]`}>
+          <div className={`${statCard} hover:shadow-[0_20px_60px_-12px_rgba(23,23,23,0.08)]`}>
             <button
               onClick={() => { setTempGoal({ ...goal }); setShowSettings(true); }}
-              className="absolute top-4 right-4 text-text-muted/60 hover:text-white transition-colors"
+              className="absolute top-4 right-4 text-text-muted/60 hover:text-text-primary transition-colors"
               title="Edit daily goal"
             >
               <GearIcon />
@@ -369,7 +369,7 @@ export default function Dashboard() {
           </div>
 
           {/* ── Streak ── */}
-          <div className={`${statCard} hover:shadow-[0_20px_60px_-12px_rgba(251,146,60,0.14)]`}>
+          <div className={`${statCard} hover:shadow-[0_20px_60px_-12px_rgba(251,146,60,0.12)]`}>
             <ProgressRing percent={goalPercent} color="#fb923c">
               <span className="text-3xl leading-none">🔥</span>
               <span className="text-2xl font-bold leading-tight">{streak.count}</span>
@@ -387,7 +387,7 @@ export default function Dashboard() {
           </div>
 
           {/* ── Accuracy ── */}
-          <div className={`${statCard} hover:shadow-[0_20px_60px_-12px_rgba(132,204,22,0.12)]`}>
+          <div className={`${statCard} hover:shadow-[0_20px_60px_-12px_rgba(23,23,23,0.08)]`}>
             <button
               onClick={() => setConfirmReset(true)}
               className="absolute top-4 right-4 text-text-muted/60 hover:text-red-400 transition-colors"
@@ -413,7 +413,7 @@ export default function Dashboard() {
                 <p className="text-sm text-center">Reset accuracy to 0?</p>
                 <div className="flex gap-2">
                   <button onClick={() => setConfirmReset(false)}
-                    className="px-4 py-1.5 rounded-lg bg-bg-surface text-sm text-text-muted hover:text-white transition-colors">
+                    className="px-4 py-1.5 rounded-lg bg-bg-surface text-sm text-text-muted hover:text-text-primary transition-colors">
                     Cancel
                   </button>
                   <button onClick={() => { updateProgress({ accuracyCorrect: 0, accuracyTotal: 0 }); setConfirmReset(false); }}
@@ -457,9 +457,9 @@ export default function Dashboard() {
                     style={{
                       width: `${p.pct}%`,
                       background: p.pct > 0
-                        ? "linear-gradient(90deg, #65a30d, #84cc16)"
-                        : "#262626",
-                      boxShadow: p.pct > 0 ? "0 0 12px rgba(132,204,22,0.35)" : "none",
+                        ? "linear-gradient(90deg, #404040, #171717)"
+                        : "#e5e5e5",
+                      boxShadow: p.pct > 0 ? "0 0 12px rgba(23,23,23,0.15)" : "none",
                     }}
                   />
                 </div>
@@ -478,11 +478,11 @@ export default function Dashboard() {
             {activityData.map((a, i) => (
               <div
                 key={i}
-                className="group/row px-4 py-3.5 flex items-start gap-3 border-b border-border/20 last:border-b-0 hover:bg-white/[0.02] transition-colors"
+                className="group/row px-4 py-3.5 flex items-start gap-3 border-b border-border/20 last:border-b-0 hover:bg-black/[0.02] transition-colors"
               >
                 <span className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${activityDot[a.type]}`} />
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm leading-snug group-hover/row:text-white transition-colors">
+                  <p className="text-sm leading-snug group-hover/row:text-text-primary transition-colors">
                     {a.text}
                   </p>
                   <p className="text-[11px] text-text-muted/50 mt-0.5">{a.time}</p>
@@ -504,7 +504,7 @@ export default function Dashboard() {
             <Link
               key={r.title}
               to={`/lessons/${r.slug}`}
-              className="card-shine animated-border group relative rounded-2xl bg-bg-card/50 backdrop-blur-sm p-5 transition-all duration-300 hover:bg-bg-card/80 hover:-translate-y-1 hover:shadow-[0_20px_60px_-12px_rgba(132,204,22,0.08)] block"
+              className="card-shine animated-border group relative rounded-2xl bg-bg-card/50 backdrop-blur-sm p-5 transition-all duration-300 hover:bg-bg-card/80 hover:-translate-y-1 hover:shadow-[0_20px_60px_-12px_rgba(23,23,23,0.06)] block"
             >
               {/* badges row */}
               <div className="flex items-center gap-2 mb-3">
@@ -620,8 +620,8 @@ export default function Dashboard() {
                       onClick={() => setWrongTopicFilter(t)}
                       className={`shrink-0 px-3 py-1 rounded-lg text-xs font-medium transition-all duration-200 ${
                         wrongTopicFilter === t
-                          ? "bg-accent text-black shadow-[0_0_16px_rgba(132,204,22,0.2)]"
-                          : "bg-bg-surface text-text-muted hover:text-white border border-border"
+                          ? "bg-accent text-white shadow-[0_0_16px_rgba(23,23,23,0.1)]"
+                          : "bg-bg-surface text-text-muted hover:text-text-primary border border-border"
                       }`}
                     >
                       {t}
@@ -718,8 +718,8 @@ export default function Dashboard() {
                       onClick={() => setTempGoal({ ...tempGoal, type: t })}
                       className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium transition-all duration-200 capitalize ${
                         tempGoal.type === t
-                          ? "bg-accent text-black shadow-[0_0_20px_rgba(132,204,22,0.25)]"
-                          : "bg-bg-surface text-text-muted hover:text-white hover:bg-bg-surface/80"
+                          ? "bg-accent text-white shadow-[0_0_20px_rgba(23,23,23,0.12)]"
+                          : "bg-bg-surface text-text-muted hover:text-text-primary hover:bg-bg-surface/80"
                       }`}
                     >
                       {t}
@@ -741,7 +741,7 @@ export default function Dashboard() {
                   onChange={(e) =>
                     setTempGoal({ ...tempGoal, target: Math.max(1, parseInt(e.target.value) || 1) })
                   }
-                  className="w-full bg-bg-surface border border-border/60 rounded-xl px-4 py-2.5 text-white outline-none focus:border-accent/60 focus:shadow-[0_0_0_3px_rgba(132,204,22,0.1)] transition-all"
+                  className="w-full bg-bg-surface border border-border/60 rounded-xl px-4 py-2.5 text-text-primary outline-none focus:border-accent/60 focus:shadow-[0_0_0_3px_rgba(23,23,23,0.08)] transition-all"
                 />
               </div>
 
@@ -749,7 +749,7 @@ export default function Dashboard() {
               <div className="flex gap-3 pt-1">
                 <button
                   onClick={() => setShowSettings(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-bg-surface text-text-muted hover:text-white transition-colors"
+                  className="flex-1 py-2.5 rounded-xl bg-bg-surface text-text-muted hover:text-text-primary transition-colors"
                 >
                   Cancel
                 </button>
@@ -758,7 +758,7 @@ export default function Dashboard() {
                     updateProgress({ goalType: tempGoal.type, goalTarget: tempGoal.target });
                     setShowSettings(false);
                   }}
-                  className="flex-1 py-2.5 rounded-xl bg-accent text-black font-semibold hover:bg-accent-dark transition-colors shadow-[0_0_20px_rgba(132,204,22,0.2)]"
+                  className="flex-1 py-2.5 rounded-xl bg-accent text-white font-semibold hover:bg-accent-dark transition-colors shadow-[0_0_20px_rgba(23,23,23,0.1)]"
                 >
                   Save
                 </button>
